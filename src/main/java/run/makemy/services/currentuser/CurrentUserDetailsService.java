@@ -8,6 +8,8 @@ import run.makemy.domains.user.CurrentUser;
 import run.makemy.domains.user.User;
 import run.makemy.services.user.UserService;
 
+import java.util.function.Supplier;
+
 @Service
 public class CurrentUserDetailsService implements UserDetailsService {
 
@@ -21,7 +23,12 @@ public class CurrentUserDetailsService implements UserDetailsService {
     @Override
     public CurrentUser loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userService.getUserByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format("User with email=%s could not be found", email)));
+                .orElseThrow(new Supplier<UsernameNotFoundException>() {
+                    @Override
+                    public UsernameNotFoundException get() {
+                        return new UsernameNotFoundException(String.format("User with email=%s could not be found", email));
+                    }
+                });
 
         return new CurrentUser(user);
     }
