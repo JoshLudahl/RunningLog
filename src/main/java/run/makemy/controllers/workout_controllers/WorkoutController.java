@@ -25,7 +25,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Supplier;
 
 @Controller
 @ComponentScan
@@ -55,12 +54,7 @@ public class WorkoutController {
         model.addAttribute("qty", listSize);
         model.addAttribute("workouts", (ArrayList<Workout>) workoutService.getUserWorkoutsByOrderByDate(id));
 
-        model.addAttribute("user", userService.getUserById(id).orElseThrow(new Supplier<NoSuchElementException>() {
-            @Override
-            public NoSuchElementException get() {
-                return new NoSuchElementException(String.format("User=%s not found", id));
-            }
-        }));
+        model.addAttribute("user", userService.getUserById(id).orElseThrow(() -> new NoSuchElementException(String.format("User=%s not found", id))));
 
         return "workouts";
     }
