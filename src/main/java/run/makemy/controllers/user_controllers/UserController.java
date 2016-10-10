@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.NoSuchElementException;
+import java.util.function.Supplier;
 
 /**
  * Created by Ohlaph on 5/7/2016.
@@ -58,7 +59,12 @@ public class UserController {
         model.addAttribute("totalDuration", calc.buildTime());
         model.addAttribute("averageRun", calc.calculateAverageRun(listSize));
 
-        return new ModelAndView("user", "user", userService.getUserById(id).orElseThrow(() -> new NoSuchElementException(String.format("User=%s not found", id))));
+        return new ModelAndView("user", "user", userService.getUserById(id).orElseThrow(new Supplier<NoSuchElementException>() {
+            @Override
+            public NoSuchElementException get() {
+                return new NoSuchElementException(String.format("User=%s not found", id));
+            }
+        }));
     }
 
     //Display the user form before posting the data
