@@ -38,7 +38,7 @@
         </thead>
         <tbody>
         <tr th:if="${#lists.isEmpty(workouts)}" class="btn-warning">
-            <td colspan="7" align="center">No Workouts Yet</td>
+            <td colspan="7" align="center" class="emptyrecord">No Workouts Yet</td>
         </tr>
         <tr class="tableView" th:each="item : ${workouts}">
 
