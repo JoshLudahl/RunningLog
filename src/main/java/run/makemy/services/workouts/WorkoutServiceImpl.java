@@ -12,6 +12,7 @@ import run.makemy.domains.workouts.Workout;
 import run.makemy.repositories.WorkoutRepository;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,7 +68,12 @@ public class WorkoutServiceImpl implements WorkoutService {
         }
 
         Comparator<Workout> byPostDate =
-                Collections.reverseOrder(Comparator.comparing(Workout::getDate));
+                Collections.reverseOrder(Comparator.comparing((java.util.function.Function<Workout, Date>) new Function<Workout, Date>() {
+                    @Override
+                    public Date apply(Workout workout1) {
+                        return workout1.getDate();
+                    }
+                }));
 
          workout = temp
                 .stream()
